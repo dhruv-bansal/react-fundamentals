@@ -5,11 +5,27 @@ import TabButton from "./components/TabButton";
 import { useState } from "react";
 
 function App() {
-const [selectedTopic, setSelectedTopic] = useState('components');
+  // TODO: see the impact of having useState at top level
+  // Ideally it should be at that component level which is actually getting changed.
+  const [selectedTopic, setSelectedTopic] = useState();
 
   function handleClick(clickedButton) {
     setSelectedTopic(clickedButton);
     console.log(`You clicked on the button! ` + selectedTopic);
+  }
+
+  // conditionally rendering the content
+  let tabContent = <p>Please select the tab content</p>;
+  if (selectedTopic) {
+    tabContent = (
+      <div id="tab-content">
+        <h3>{EXAMPLES[selectedTopic].title}</h3>
+        <p>{EXAMPLES[selectedTopic].description}</p>
+        <pre>
+          <code>{EXAMPLES[selectedTopic].code}</code>
+        </pre>
+      </div>
+    );
   }
 
   return (
@@ -42,21 +58,15 @@ const [selectedTopic, setSelectedTopic] = useState('components');
         <section id="examples">
           <h2>Examples</h2>
           <menu>
-            <TabButton onSelect={() => handleClick('components')}>Component</TabButton>
-            <TabButton onSelect={() => handleClick('jsx')}>JSX</TabButton>
-            <TabButton onSelect={() => handleClick('props')}>Props</TabButton>
-            <TabButton onSelect={() => handleClick('state')}>State</TabButton>
+            <TabButton isSelected={selectedTopic == "components"} onSelect={() => handleClick("components")}>
+              Component
+            </TabButton>
+            <TabButton isSelected={selectedTopic == "jsx"} onSelect={() => handleClick("jsx")}>JSX</TabButton>
+            <TabButton isSelected={selectedTopic == "props"} onSelect={() => handleClick("props")}>Props</TabButton>
+            <TabButton isSelected={selectedTopic == "state"} onSelect={() => handleClick("state")}>State</TabButton>
           </menu>
-          <div id="tab-content">
-            <h3>{EXAMPLES[selectedTopic].title}</h3>
-            <p>{EXAMPLES[selectedTopic].description}</p>
-            <pre>
-              <code>
-              {EXAMPLES[selectedTopic].code}
-              </code>
-            </pre>
-          </div>
-          {selectedTopic}
+
+          {tabContent}
         </section>
       </main>
     </div>

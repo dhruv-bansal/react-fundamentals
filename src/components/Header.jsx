@@ -1,5 +1,7 @@
 import reactImg from "../assets/react-core-concepts.png";
 const reactDescriptions = ["Fundamental", "Crucial", "Core"];
+
+// importing css file here keeps the code closer. But the scope of this css file is still product wise (not restricted to this component)
 import './Header.css';
 
 function genRandomInt(max) {
