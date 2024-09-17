@@ -16,6 +16,7 @@ export default function Examples() {
 
   // conditionally rendering the content
   let tabContent = <p>Please select the tab content</p>;
+  
   if (selectedTopic) {
     tabContent = (
       <div id="tab-content">
