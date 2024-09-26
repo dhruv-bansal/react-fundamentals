@@ -6,16 +6,32 @@ import { useState } from "react";
 
 function App() {
 
+  const [gameTurns, setGameTurn] = useState([]);
   const [currentPlayerSymbol, setCurrentPlayerSymbol] = useState("X");
 
   // Learning: importance concept setCurrentPlayerSymbol is the state function - so it can't be directly called inside the 
   // component as it would be infinte loop. Triggering this functions re-executes the component
-  function handleSelectSymbol() {
+  
+  function handleSelectSymbol(rowIndex, colIndex) {
     setCurrentPlayerSymbol((previousPlayerSymbol) =>
       previousPlayerSymbol === "X" ? "O" : "X"
     )
-  }
 
+    setGameTurn(preTurns => {
+
+      // Learning: why we needed to calculate state again rather then getting it from the above player state
+      let currentPlayer = 'X';
+      if(preTurns.length > 0 && preTurns[0].player === 'X') {
+        currentPlayer = 'O';
+      }
+
+      // complex object with
+      const turn = {square: {row: rowIndex, col: colIndex}, player: currentPlayer};
+      const updatedTurns = [turn, ...preTurns];
+
+      return updatedTurns;
+    });
+  }
 
   return (
     <main>
@@ -25,10 +41,11 @@ function App() {
           <Player name="Player 2" symbol="O" isActive={currentPlayerSymbol == 'O'} />
         </ol>
 
-       <GameBoard currentPlayerSymbol={currentPlayerSymbol} onSelectSymbol={handleSelectSymbol} />
-       
-       <Log />
+       <GameBoard turns={gameTurns} onSelectSymbol={handleSelectSymbol} />
+      
       </div>
+
+      <Log turns={gameTurns} />
     </main>
   );
 }
